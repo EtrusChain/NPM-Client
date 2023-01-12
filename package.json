@@ -1,0 +1,11 @@
+{
+  "name": "EtrusChain-Client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Chain-Storage/EtrusChain-Client.git",
+  "author": "yurikaza <yusufmirza55@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}
