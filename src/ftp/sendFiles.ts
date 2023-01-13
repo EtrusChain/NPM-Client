@@ -6,8 +6,6 @@ import { IsendFile } from '../@interface/sendFiles';
 import { IReadFiles } from '../@interface/readFiles';
 
 export async function sendFiles(fileName: string): Promise<IsendFile> {
-  console.log('sendFiles Function Started');
-
   const readFile: Promise<IReadFiles> = readFiles(`${__dirname}/files/${fileName}`);
 
   const fileArray: any[] = [
@@ -19,7 +17,6 @@ export async function sendFiles(fileName: string): Promise<IsendFile> {
     (await readFile).peerSix,
   ];
 
-  console.log('peers calling..');
   const getPeersData: Promise<IgetPeers> = getPeers();
 
   const peersUserId: string[] = (await getPeersData).userIpData;
@@ -29,28 +26,21 @@ export async function sendFiles(fileName: string): Promise<IsendFile> {
   const perr: any = peersUserId.slice(0, 6);
   const perrName: any = peersUserName.slice(0, 6);
 
-  console.log(perr, peersUserId, getPeersData);
-
   removeDuplicates(perr);
   removeDuplicates(perrName);
 
   for (let index = 0; index < 6; index++) {
-    console.log('Send Peers Buffer Loop Start');
-
     let userIp = perr[index];
     let hostName = perrName[index];
     const fileArrayElement = fileArray[index];
-
-    console.log(userIp.userIp, fileArrayElement);
 
     if (typeof userIp === 'undefined') {
       userIp = perr[0];
       hostName = perrName[0];
     }
 
-    //createFile(element, ((await readFile) as any).peer + fileArrayElement);
+    // createFile(element, ((await readFile) as any).peer + fileArrayElement);
     sendFilesBuffer((await readFile).peerFile.fileHash + `-${index}`, fileArrayElement, hostName, userIp);
-    console.log('File Sending...');
   }
 
   return {

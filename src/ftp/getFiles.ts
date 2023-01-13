@@ -5,15 +5,12 @@ import { removeDuplicates } from '../utils/removeDuplicates';
 import { IgetFiles } from '../@interface/getFiles';
 
 export async function getFiles(fileHash: string, fileName: string): Promise<IgetFiles> {
-  let fileData: any = [];
+  const fileData: any = [];
   const userIp = (await getPeers()).userIpData;
   const userHostName = (await getPeers()).hostNameData;
 
-  console.log(userIp, userHostName);
   removeDuplicates(userIp);
   removeDuplicates(userHostName);
-
-  console.log(userIp, userHostName);
 
   for (let index = 0; index < userIp.length; index++) {
     const userIpIndex = userIp[index];
@@ -31,51 +28,24 @@ export async function getFiles(fileHash: string, fileName: string): Promise<Iget
         password: `${process.env.PASSWORD}`,
         secure: false,
       })
-      .then((data: ftpClient.FTPResponse) => {
-        console.log(data.code);
-      })
       .catch((err: ftpClient.FTPResponse | Error | any) => {
-        console.error(err);
-
         if (err.code === 'ECONNREFUSED') {
-          //process.exit(1);
-          console.log('hello world');
-        } else {
-          console.log('No Waaaay!!!');
+          // process.exit(1);
         }
       });
-
-    for (let index = 0; index < 6; index++) {
-      const file = await client
-        .downloadTo(fileName, `${__dirname}/files/${fileName}-${index}`)
-        .then((data: ftpClient.FTPResponse) => {
-          console.log(data);
-        })
-        .catch((err: any) => {});
-    }
   }
 
   for (let index: number = 0; index < 6; index++) {
-    const data: any = readFileSync(__dirname + `/files/${fileHash}-${index}`);
+    const userFileData: any = readFileSync(__dirname + `/files/${fileHash}-${index}`);
 
-    fileData.push(data);
+    fileData.push(userFileData);
   }
 
   const fileBuffer = Buffer.concat(fileData);
 
-  var readWriteFile = function (req: any) {
-    var fs = require('fs');
-    var data = Buffer.from(req);
-    fs.writeFile(`${__dirname}/download/${fileName}`, data, 'binary', function (err: any) {
-      if (err) {
-        console.log('There was an error writing the image');
-      } else {
-        console.log('The sheel file was written');
-      }
-    });
-  };
-
-  readWriteFile(fileBuffer);
+  const fs = require('fs');
+  const data = Buffer.from(fileBuffer);
+  fs.writeFile(`${__dirname}/download/${fileName}`, data, 'binary');
 
   return {
     message: 'File Sended',
@@ -86,4 +56,4 @@ export async function getFiles(fileHash: string, fileName: string): Promise<Iget
   };
 }
 
-//getFiles('Ec3fe4c1dda5aa86b1abecb8d4478c1057bd69d43b82086ff995aae1149cff6927', 'Hands-on-blockchain.pdf');
+// getFiles('Ec3fe4c1dda5aa86b1abecb8d4478c1057bd69d43b82086ff995aae1149cff6927', 'Hands-on-blockchain.pdf');

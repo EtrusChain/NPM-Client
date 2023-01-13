@@ -1,6 +1,6 @@
 import { networkInterfaces, type } from 'os';
 
-interface resultsI extends String {
+interface Iresults {
   wlp8s0: any;
 }
 
@@ -11,7 +11,7 @@ interface IuserIp {
 
 export async function userIp(): Promise<IuserIp> {
   const nets: any = networkInterfaces();
-  const results: resultsI | any = Object.create(null);
+  const results: Iresults | any = Object.create(null);
 
   for (const name of Object.keys(nets)) {
     for (const net of nets[name]) {
@@ -27,26 +27,20 @@ export async function userIp(): Promise<IuserIp> {
     }
   }
 
-  console.log(results);
-
   let hostUrl: string = '';
-  let userIp: string = '';
+  let userIpName: string = '';
   const port = 9001;
 
   if (type() === 'Windows_NT') {
     hostUrl = `ftp://${results['VirtualBox Host-Only Network'][0]}:` + port;
-    userIp = results['VirtualBox Host-Only Network'][0];
+    userIpName = results['VirtualBox Host-Only Network'][0];
   } else if (type() === 'Linux') {
     hostUrl = `ftp://${results.wlp8s0[0]}:` + port;
-    userIp = results.wlp8s0[0];
-  } else {
-    console.error('This ftp server only support Windows and Linux');
+    userIpName = results.wlp8s0[0];
   }
-
-  console.log(hostUrl);
 
   return {
     peerHostUrl: hostUrl,
-    peerUserIp: userIp,
+    peerUserIp: userIpName,
   };
 }

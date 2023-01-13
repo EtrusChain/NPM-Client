@@ -8,8 +8,6 @@ export interface IgetPeers {
   hostNameData: string[];
 }
 
-console.log('getPeers Function Started');
-
 config();
 // 4. Connect to MongoDB
 async function dataBase() {
@@ -38,18 +36,13 @@ export const User = model<IUser>('User', userSchema);
 export async function getPeers(): Promise<IgetPeers> {
   const user: any = await User.find({});
 
-  console.log(user);
+  const userArray: string[] = [];
+  const usersHostName: string[] = [];
 
-  let userArray: string[] = [];
-  let usersHostName: string[] = [];
-
-  for (let index = 0; index < user.length; index++) {
-    const element = user[index];
-
-    userArray.push(element.userIp);
-    usersHostName.push(element.hostName);
+  for (const iterator of user) {
+    userArray.push(iterator.userIp);
+    usersHostName.push(iterator.hostName);
   }
-  console.log('GetPeers Function End');
 
   return {
     message: 'Peers Finded',

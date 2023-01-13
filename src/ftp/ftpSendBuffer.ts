@@ -15,8 +15,6 @@ export async function sendFilesBuffer(
   hostName: string,
   hostIp: string,
 ): Promise<void> {
-  console.log('sendFilesBuffer Function Started');
-
   const client = new ftpClient.Client();
 
   client.ftp.verbose = true;
@@ -32,8 +30,6 @@ export async function sendFilesBuffer(
   const fileBuffer = Buffer.from(buffer);
 
   writeFile(fileName, fileBuffer, (data: any): void => {
-    console.log(data);
-
     client.uploadFrom(fileName, data);
   });
 }
