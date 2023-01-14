@@ -3,15 +3,8 @@ import { join, basename } from 'path';
 import { createHash } from 'crypto';
 import { IReadFiles } from '../@interface/readFiles';
 
-export async function readFiles(pathName: string): Promise<IReadFiles> {
-  const filePath = join(pathName);
-  const buffer: any = readFileSync(filePath);
-  const fileName = basename(pathName);
-
-  const readStream = createReadStream(fileName, {
-    start: 0,
-    end: 256,
-  });
+export async function readFiles(fileBuffer: Buffer[], fileNameArg: string): Promise<IReadFiles> {
+  const fileName = basename(fileNameArg);
 
   function mySplit(a: any[], delimiter: number): any[][] {
     const result = [];
@@ -30,7 +23,7 @@ export async function readFiles(pathName: string): Promise<IReadFiles> {
     return result;
   }
 
-  const fileData: number[] = mySplit(buffer, -1)[0];
+  const fileData: number[] = mySplit(fileBuffer, -1)[0];
   let fileDataLenght1 = Math.trunc(fileData.length / 6);
 
   let fileDataLenght2 = Math.trunc(fileData.length / 6) + Math.trunc(fileDataLenght1);
@@ -58,7 +51,7 @@ export async function readFiles(pathName: string): Promise<IReadFiles> {
   ];
 
   // Hash will be upadte for create with file buffer
-  const fileHash = createHash('sha256').update(buffer).digest('hex') as string;
+  const fileHash = createHash('sha256').update(fileNameArg).digest('hex') as string;
 
   const peersObject: IReadFiles = {
     peerOne: fileData.slice(0, fileDataLenght1),

@@ -5,8 +5,8 @@ import { readFiles } from './readFile';
 import { IsendFile } from '../@interface/sendFiles';
 import { IReadFiles } from '../@interface/readFiles';
 
-export async function sendFiles(fileName: string): Promise<IsendFile> {
-  const readFile: Promise<IReadFiles> = readFiles(`${__dirname}/files/${fileName}`);
+export async function sendFiles(fileBuffer: Buffer[], fileName: string): Promise<IsendFile> {
+  const readFile: Promise<IReadFiles> = readFiles(fileBuffer, `${fileName}`);
 
   const fileArray: any[] = [
     (await readFile).peerOne,
