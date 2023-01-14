@@ -3,7 +3,7 @@ import { join, basename } from 'path';
 import { createHash } from 'crypto';
 import { IReadFiles } from '../@interface/readFiles';
 
-export async function readFiles(fileBuffer: Buffer[], fileNameArg: string): Promise<IReadFiles> {
+export async function readFiles(fileBuffer: any[], fileNameArg: string): Promise<IReadFiles> {
   const fileName = basename(fileNameArg);
 
   function mySplit(a: any[], delimiter: number): any[][] {

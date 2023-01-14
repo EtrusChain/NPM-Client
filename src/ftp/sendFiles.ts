@@ -5,7 +5,7 @@ import { readFiles } from './readFile';
 import { IsendFile } from '../@interface/sendFiles';
 import { IReadFiles } from '../@interface/readFiles';
 
-export async function sendFiles(fileBuffer: Buffer[], fileName: string): Promise<IsendFile> {
+export async function sendFiles(fileBuffer: any[], fileName: string): Promise<IsendFile> {
   const readFile: Promise<IReadFiles> = readFiles(fileBuffer, `${fileName}`);
 
   const fileArray: any[] = [
